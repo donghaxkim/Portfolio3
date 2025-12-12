@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { MdEmail } from 'react-icons/md'
+import { FaLinkedin, FaGithub, FaXTwitter } from 'react-icons/fa6'
 import Navbar from './Navbar'
 
 function App() {
@@ -46,7 +48,7 @@ function App() {
               transition={{ duration: 0.5 }}
               className="w-full max-w-2xl mx-auto"
             >
-              <h1 className="text-4xl md:text-5xl font-semibold mb-20 md:mb-20 -translate-x-8 md:-translate-x-1 -mt-8 md:-mt-12 tracking-tighter text-left" style={{ fontFamily: "'Work Sans', sans-serif" }}>
+              <h1 className="text-6xl md:text-7xl font-semibold mb-0 -mt-8 md:-mt-12 tracking-tighter text-left" style={{ fontFamily: "'Dongle', sans-serif" }}>
                   Dongha Kim
               </h1>
               
@@ -54,6 +56,7 @@ function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
+                style={{ marginTop: '-1.25rem' }}
                 className={`space-y-6 md:space-y-8 text-sm md:text-base font-light leading-loose ${
                   theme === 'dark' ? 'text-white/80' : 'text-black/80'
                 }`}
@@ -100,6 +103,50 @@ function App() {
                   </a>
                   !
                 </p>
+                
+                {/* Social Media Icons */}
+                <div className="flex gap-4 mt-14">
+                  <a
+                    href="mailto:dongha.kim@uwaterloo.ca"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`transition-opacity ${
+                      theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                    }`}
+                  >
+                    <MdEmail size={20} />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/dongha-kimm/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`transition-opacity ${
+                      theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                    }`}
+                  >
+                    <FaLinkedin size={20} />
+                  </a>
+                  <a
+                    href="https://github.com/donghaxkim"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`transition-opacity ${
+                      theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                    }`}
+                  >
+                    <FaGithub size={20} />
+                  </a>
+                  <a
+                    href="https://x.com/imdonghakim"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`transition-opacity ${
+                      theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                    }`}
+                  >
+                    <FaXTwitter size={20} />
+                  </a>
+                </div>
               </motion.div>
             </motion.div>
           )}
