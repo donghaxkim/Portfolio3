@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MdEmail } from 'react-icons/md'
 import { FaLinkedin, FaGithub, FaXTwitter } from 'react-icons/fa6'
 import Navbar from './Navbar'
+import SplashCursor from './SplashCursor'
 
 function App() {
   const [theme, setTheme] = useState('light')
@@ -29,6 +30,9 @@ function App() {
           theme === 'dark' ? 'bg-[#1e1e1e] text-white' : 'bg-white text-black'
         }`}
       >
+        {/* Splash Cursor Effect */}
+        <SplashCursor theme={theme} />
+        
         {/* Navbar */}
         <Navbar 
           theme={theme}
@@ -48,7 +52,7 @@ function App() {
               transition={{ duration: 0.5 }}
               className="w-full max-w-2xl mx-auto"
             >
-              <h1 className="text-6xl md:text-7xl font-semibold mb-0 -mt-8 md:-mt-12 tracking-tighter text-left" style={{ fontFamily: "'Dongle', sans-serif" }}>
+              <h1 className="text-6xl md:text-6xl font-semibold tracking-tighter text-left -mt-8 md:-mt-12 mb-6 md:mb-8" style={{ fontFamily: "'Gowun Batang', serif" }}>
                   Dongha Kim
               </h1>
               
@@ -56,7 +60,7 @@ function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                style={{ marginTop: '-1.25rem' }}
+                style={{ marginTop: 0 }}
                 className={`space-y-6 md:space-y-8 text-sm md:text-base font-light leading-loose ${
                   theme === 'dark' ? 'text-white/80' : 'text-black/80'
                 }`}
@@ -94,7 +98,7 @@ function App() {
                 <p>
                   I'm always excited to meet new people, whether it's to discuss a potential project, a professional opportunity, or just to have an insightful chat. Feel free to reach out{' '}
                   <a
-                    href="mailto:your.email@example.com"
+                    href="mailto:dongha.kim@uwaterloo.ca"
                     className={`font-medium underline ${
                       theme === 'dark' ? 'text-white hover:text-white/80' : 'text-black hover:text-black/70'
                     }`}
