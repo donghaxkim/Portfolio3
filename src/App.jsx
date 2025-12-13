@@ -30,8 +30,13 @@ function App() {
           theme === 'dark' ? 'bg-[#1e1e1e] text-white' : 'bg-white text-black'
         }`}
       >
-        {/* Splash Cursor Effect */}
-        <SplashCursor theme={theme} />
+        {/* Splash Cursor Effect (smaller splashes) */}
+        <SplashCursor
+          theme={theme}
+          SPLAT_RADIUS={0.05}
+          SPLAT_FORCE={1500}
+          COLOR_UPDATE_SPEED={8}
+        />
         
         {/* Navbar */}
         <Navbar 
@@ -60,7 +65,7 @@ function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                style={{ marginTop: 0 }}
+                style={{ marginTop: 0, fontFamily: "'Karla', sans-serif" }}
                 className={`space-y-6 md:space-y-8 text-sm md:text-base font-light leading-loose ${
                   theme === 'dark' ? 'text-white/80' : 'text-black/80'
                 }`}
