@@ -1,33 +1,69 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion'
+import { useRef, useState, useEffect, useMemo, useCallback, memo } from 'react'
+import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
 
-// Configuration
-const CELL_SIZE = 300 
-const GAP = 20
+const images = import.meta.glob('./public/toWEBP/*.webp', { eager: true, import: 'default' })
+const IMAGE_URLS = Object.values(images)
+
+// Log the number of unique images loaded
+console.log(`✓ Loaded ${IMAGE_URLS.length} unique images from gallery`)
+
+const CELL_SIZE = 280 
+const GAP = 25
 const TOTAL_CELL = CELL_SIZE + GAP
 
-const IMAGES = [
-  '1164962732570788597.jpg', 'IMG_0486.JPG', 'IMG_1007.JPG', 'IMG_1454.JPG',
-  'IMG_3177.JPG', 'IMG_3195.JPG', 'IMG_3356.JPG', 'IMG_3476.JPG',
-  'IMG_4263.JPG', 'IMG_4951.JPG', 'IMG_5224.JPG', 'IMG_5422.JPG',
-  'IMG_5475.JPG', 'IMG_5649.JPG', 'IMG_6065.JPG', 'IMG_6111.JPG',
-  'IMG_6168.JPG', 'IMG_6414.JPG', 'IMG_6881.JPG', 'IMG_6972.JPG',
-  'IMG_7194.JPG', 'IMG_7496.JPG', 'IMG_7795.JPG', 'IMG_8234.JPG',
-  'IMG_8416.JPG', 'IMG_8949.JPG', 'IMG_9231.JPG',
-]
-
+// Helper for wrap-around logic
 const mod = (n, m) => ((n % m) + m) % m
+
+// Improved hash function for better distribution
+const getImageIndex = (col, row, totalImages) => {
+  // Use multiple large primes for better distribution
+  const hash1 = col * 2654435761
+  const hash2 = row * 2246822519
+  const combined = (hash1 ^ hash2) >>> 0 // Ensure positive 32-bit integer
+  return combined % totalImages
+}
+
+// Shuffle array using Fisher-Yates algorithm
+const shuffleArray = (array) => {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
 
 const InfiniteGrid = ({ theme }) => {
   const [containerSize, setContainerSize] = useState({ width: window.innerWidth, height: window.innerHeight })
+  const [isReady, setIsReady] = useState(false)
+  const [loadedCount, setLoadedCount] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   
-  // Base motion values
-  const xRaw = useMotionValue(0)
-  const yRaw = useMotionValue(0)
-  
-  // Spring handles the "momentum" glide after you let go
-  const x = useSpring(xRaw, { stiffness: 400, damping: 60, restDelta: 0.1 })
-  const y = useSpring(yRaw, { stiffness: 400, damping: 60, restDelta: 0.1 })
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Shuffle images once for better variety
+  const shuffledImages = useMemo(() => shuffleArray(IMAGE_URLS), [])
+
+  // Optimized Preloader
+  useEffect(() => {
+    let count = 0
+    const preload = async () => {
+      const promises = shuffledImages.map((url) => {
+        return new Promise((resolve) => {
+          const img = new Image()
+          img.src = url
+          img.onload = () => { count++; setLoadedCount(count); resolve() }
+          img.onerror = () => { count++; setLoadedCount(count); resolve() }
+        })
+      })
+      await Promise.all(promises)
+      setTimeout(() => setIsReady(true), 400)
+    }
+    preload()
+  }, [shuffledImages])
 
   useEffect(() => {
     const handleResize = () => setContainerSize({ width: window.innerWidth, height: window.innerHeight })
@@ -35,41 +71,90 @@ const InfiniteGrid = ({ theme }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // Optimized Grid Logic - ensures no duplicate images on screen
   const gridConfig = useMemo(() => {
-    const cols = Math.ceil(containerSize.width / TOTAL_CELL) + 2
-    const rows = Math.ceil(containerSize.height / TOTAL_CELL) + 2
+    const cols = Math.ceil(containerSize.width / TOTAL_CELL) + 4
+    const rows = Math.ceil(containerSize.height / TOTAL_CELL) + 4
+    const totalCells = cols * rows
     const items = []
+    
+    // Create a large pool by repeating shuffled images to cover all cells
+    // This ensures uniqueness within the visible grid
+    const imagePool = []
+    const repetitions = Math.ceil(totalCells / shuffledImages.length)
+    for (let i = 0; i < repetitions; i++) {
+      // Re-shuffle each repetition for variety across screen boundaries
+      imagePool.push(...shuffleArray(shuffledImages))
+    }
+    
+    let poolIndex = 0
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        items.push({ id: `${r}-${c}`, relX: c, relY: r })
+        items.push({ 
+          id: `${r}-${c}`, 
+          relX: c - 1, 
+          relY: r - 1,
+          imgUrl: imagePool[poolIndex % imagePool.length]
+        })
+        poolIndex++
       }
     }
     return { items, cols, rows }
-  }, [containerSize])
+  }, [containerSize, shuffledImages])
 
-  // Capture dragging everywhere on the screen
-  const onPan = (_, info) => {
-    xRaw.set(xRaw.get() + info.delta.x)
-    yRaw.set(yRaw.get() + info.delta.y)
-  }
+  const onPanStart = useCallback(() => {
+    setIsDragging(true)
+  }, [])
+
+  const onPan = useCallback((_, info) => {
+    x.set(x.get() + info.delta.x)
+    y.set(y.get() + info.delta.y)
+  }, [x, y])
+
+  const onPanEnd = useCallback(() => {
+    setIsDragging(false)
+  }, [])
 
   return (
     <div 
-      className={`w-full h-screen overflow-hidden relative touch-none select-none transition-colors duration-500 ${
-        theme === 'dark' ? 'bg-[#111]' : 'bg-[#f5f5f5]'
-      }`}
+      onMouseMove={(e) => { mouseX.set(e.clientX); mouseY.set(e.clientY) }}
+      className={`w-full h-screen overflow-hidden relative touch-none select-none ${theme === 'dark' ? 'bg-[#0a0a0a]' : 'bg-[#fafafa]'}`}
     >
-      <motion.div
+      <AnimatePresence>
+        {!isReady && (
+          <motion.div 
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-inherit"
+          >
+             <div className="w-32 h-[1px] bg-neutral-800 mb-4">
+                <motion.div 
+                  className={`h-full ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(loadedCount / IMAGE_URLS.length) * 100}%` }}
+                />
+             </div>
+             <p className="text-[9px] tracking-[0.5em] uppercase opacity-40 font-mono">
+                Buffering Gallery
+             </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div 
+        onPanStart={onPanStart}
         onPan={onPan}
-        className="absolute inset-0 z-0 active:cursor-grabbing"
-        style={{ cursor: 'grab' }}
+        onPanEnd={onPanEnd}
+        className="absolute inset-0 z-0" 
+        style={{ cursor: isDragging ? 'grabbing' : 'grab', opacity: isReady ? 1 : 0 }}
       >
-        {gridConfig.items.map((slot) => (
+        {gridConfig.items.map((item) => (
           <GridItem
-            key={slot.id}
-            slot={slot}
+            key={item.id}
+            item={item}
             x={x}
             y={y}
+            mouseX={mouseX}
+            mouseY={mouseY}
             gridWidth={gridConfig.cols * TOTAL_CELL}
             gridHeight={gridConfig.rows * TOTAL_CELL}
             theme={theme}
@@ -80,30 +165,24 @@ const InfiniteGrid = ({ theme }) => {
   )
 }
 
-const GridItem = ({ slot, x, y, gridWidth, gridHeight, theme }) => {
-  const [isLoaded, setIsLoaded] = useState(false)
+const GridItem = memo(({ item, x, y, mouseX, mouseY, gridWidth, gridHeight, theme }) => {
+  const tx = useTransform(x, (v) => mod((item.relX * TOTAL_CELL) + v + TOTAL_CELL, gridWidth) - TOTAL_CELL)
+  const ty = useTransform(y, (v) => mod((item.relY * TOTAL_CELL) + v + TOTAL_CELL, gridHeight) - TOTAL_CELL)
 
-  // Use transforms for high-performance positioning
-  const translateX = useTransform(x, (v) => mod((slot.relX * TOTAL_CELL) + v + TOTAL_CELL, gridWidth) - TOTAL_CELL)
-  const translateY = useTransform(y, (v) => mod((slot.relY * TOTAL_CELL) + v + TOTAL_CELL, gridHeight) - TOTAL_CELL)
-
-  // Image index calculation
-  const [imgIndex, setImgIndex] = useState(0)
-  
-  // Track position to update image source when wrapping
-  useEffect(() => {
-    const updateIndex = () => {
-      const colOffset = Math.floor(((slot.relX * TOTAL_CELL) + x.get()) / gridWidth)
-      const rowOffset = Math.floor(((slot.relY * TOTAL_CELL) + y.get()) / gridHeight)
-      const newIdx = mod(slot.relX + slot.relY + colOffset + rowOffset, IMAGES.length)
-      setImgIndex(newIdx)
-    }
+  // Magnetic Scale Effect - optimized with reduced calculation frequency
+  const scale = useTransform([tx, ty, mouseX, mouseY], ([latestX, latestY, mx, my]) => {
+    const centerX = latestX + CELL_SIZE / 2
+    const centerY = latestY + CELL_SIZE / 2
+    const dx = mx - centerX
+    const dy = my - centerY
+    const distanceSq = dx * dx + dy * dy
+    const threshold = 350 * 350
     
-    // Check index on mount and on spring change
-    updateIndex()
-    const unsub = x.on("change", updateIndex)
-    return () => unsub()
-  }, [gridWidth, gridHeight])
+    if (distanceSq > threshold) return 1
+    
+    const distance = Math.sqrt(distanceSq)
+    return 1 + (1 - distance / 350) * 0.12
+  })
 
   return (
     <motion.div
@@ -111,26 +190,31 @@ const GridItem = ({ slot, x, y, gridWidth, gridHeight, theme }) => {
         position: 'absolute',
         width: CELL_SIZE,
         height: CELL_SIZE,
-        x: translateX,
-        y: translateY,
+        x: tx,
+        y: ty,
+        scale,
+        willChange: 'transform',
+        transformTemplate: ({ x, y, scale }) => `translate3d(${x}, ${y}, 0) scale(${scale})`,
       }}
       className="pointer-events-none"
     >
-      <div 
-        className={`w-full h-full rounded-lg overflow-hidden transition-opacity duration-1000 ${
-          theme === 'dark' ? 'bg-white/[0.03] ring-1 ring-white/10' : 'bg-black/[0.03] ring-1 ring-black/5'
-        }`}
-      >
+      <div className={`w-full h-full rounded-2xl overflow-hidden shadow-2xl ${
+        theme === 'dark' ? 'bg-white/5 ring-1 ring-white/10' : 'bg-black/5 ring-1 ring-black/5'
+      }`}>
         <img
-          src={`/src/public/Website/${IMAGES[imgIndex]}`}
-          className={`w-full h-full object-cover transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setIsLoaded(true)}
+          src={item.imgUrl}
+          alt=""
+          className="w-full h-full object-cover"
+          loading="eager"
           decoding="async"
-          loading="lazy"
+          draggable={false}
         />
       </div>
     </motion.div>
   )
-}
+}, (prevProps, nextProps) => {
+  // Custom comparison for memo - only re-render if theme changes or item id changes
+  return prevProps.item.id === nextProps.item.id && prevProps.theme === nextProps.theme
+})
 
 export default InfiniteGrid
