@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
+import { LoadingIndicator } from '@/components/application/loading-indicator/loading-indicator'
 
 const images = import.meta.glob('./public/toWEBP/*.webp', { eager: true, import: 'default' })
 const IMAGE_URLS = Object.values(images)
@@ -150,28 +151,9 @@ const InfiniteGrid = ({ theme }) => {
             exit={{ opacity: 0, transition: { duration: 0.2 } }}
             className={`fixed inset-0 z-[100] flex items-center justify-center transition-colors duration-500 ${theme === 'dark' ? 'bg-[#1e1e1e]' : 'bg-white'}`}
           >
-            <svg className="w-6 h-6 -rotate-90" viewBox="0 0 100 100">
-              <circle
-                cx="50" cy="50" r="45"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="8"
-                className="text-neutral-200 dark:text-neutral-800 transition-colors duration-500"
-                opacity="0.3"
-              />
-              <motion.circle
-                cx="50" cy="50" r="45"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="8"
-                strokeLinecap="round"
-                className="text-neutral-500 transition-colors duration-500"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: loadedCount / IMAGE_URLS.length }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-                style={{ strokeDasharray: "1 1" }}
-              />
-            </svg>
+            <div className="[&_.stroke-fg-brand-primary]:!stroke-neutral-500 [&_.text-bg-tertiary]:!text-neutral-300 dark:[&_.text-bg-tertiary]:!text-neutral-700">
+              <LoadingIndicator type="line-simple" size="md" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
