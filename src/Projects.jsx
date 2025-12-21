@@ -29,8 +29,8 @@ const Projects = ({ theme }) => {
       style={{ marginTop: '-16rem' }}
     >
       <h1 
-        className="text-6xl md:text-6xl font-semibold tracking-tighter text-left mb-12 md:mb-16" 
-        style={{ fontFamily: "'Gowun Batang', serif" }}
+        className="text-6xl md:text-6xl font-semibold tracking-tighter text-left" 
+        style={{ fontFamily: "'Gowun Batang', serif", marginBottom: '0.88rem' }}
       >
         Projects
       </h1>
