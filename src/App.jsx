@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MdEmail } from 'react-icons/md'
 import { FaLinkedin, FaGithub, FaXTwitter } from 'react-icons/fa6'
 import Navbar from './Navbar'
-import SplashCursor from './SplashCursor'
 import SpotifyPlayer from './SpotifyPlayer'
 import Projects from './Projects'
+import InfiniteGrid from './InfiniteGrid'
 
 // Home component
 const Home = ({ theme }) => {
@@ -18,7 +18,7 @@ const Home = ({ theme }) => {
       transition={{ duration: 0.5 }}
       className="w-full max-w-2xl mx-auto"
     >
-      <h1 className="text-6xl md:text-6xl font-semibold tracking-tighter text-left -mt-8 md:-mt-12 mb-6 md:mb-8" style={{ fontFamily: "'Gowun Batang', serif" }}>
+      <h1 className="text-6xl md:text-6xl font-semibold tracking-tighter text-left -mt-8 md:-mt-12" style={{ fontFamily: "'Gowun Batang', serif", marginBottom: '0.88rem' }}>
         Dongha Kim
       </h1>
       
@@ -26,7 +26,7 @@ const Home = ({ theme }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        style={{ marginTop: 0, fontFamily: "'Karla', sans-serif" }}
+        style={{ fontFamily: "'Karla', sans-serif" }}
         className={`space-y-6 md:space-y-8 text-sm md:text-base font-light leading-loose ${
           theme === 'dark' ? 'text-white/80' : 'text-black/80'
         }`}
@@ -146,14 +146,6 @@ function App() {
           theme === 'dark' ? 'bg-[#1e1e1e] text-white' : 'bg-white text-black'
         }`}
       >
-        {/* Splash Cursor Effect (smaller splashes) */}
-        <SplashCursor
-          theme={theme}
-          SPLAT_RADIUS={0.08}
-          SPLAT_FORCE={4500}
-          COLOR_UPDATE_SPEED={8}
-        />
-        
         {/* Navbar */}
         <Navbar 
           theme={theme}
@@ -165,6 +157,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home theme={theme} />} />
           <Route path="/projects" element={<Projects theme={theme} />} />
+          <Route path="/grid" element={<InfiniteGrid theme={theme} />} />
         </Routes>
 
         {/* Spotify Player in bottom-right */}

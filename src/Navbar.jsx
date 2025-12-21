@@ -32,12 +32,13 @@ const Navbar = ({ theme, toggleTheme }) => {
               <FaCubes />
             </RouterLink>
 
-            <div
+            <RouterLink
+              to="/grid"
               className={`cursor-pointer w-[56px] h-[56px] flex items-center justify-center ${iconHover} transition-all duration-200`}
-              title="gallery (coming soon)"
+              title="gallery"
             >
               <IoMdPhotos />
-            </div>
+            </RouterLink>
 
             <div
               className={`cursor-pointer w-[56px] h-[56px] flex items-center justify-center ${iconHover} transition-all duration-200`}
