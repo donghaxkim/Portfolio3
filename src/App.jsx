@@ -32,7 +32,7 @@ const Home = ({ theme }) => {
         }`}
       >
         <p>
-          Hi, I'm <strong className="font-medium">DK</strong>, a <strong className="font-medium">Mathematics</strong> student at the <strong className="font-medium">University of Waterloo</strong>. I have a strong interest in <strong className="font-medium">Leadership</strong> and <strong className="font-medium">Software Engineering</strong>, and while my studies keep me immersed most of the time, I'm a firm believer that the best growth happens through connection and collaboration.
+          Hi, I'm <strong className="font-medium">DK</strong>, a <strong className="font-medium">Mathematics</strong> student at the <strong className="font-medium">University of Waterloo</strong>. I have a strong interest in <strong className="font-medium">Growth</strong> & <strong className="font-medium">Software Engineering</strong>, and while my studies keep me immersed most of the time, I'm a firm believer that the best growth happens through connection and collaboration.
         </p>
         
         <p>

@@ -13,7 +13,13 @@ const Projects = ({ theme }) => {
       name: "Personal Website v2",
       techStack: ["Next.js", "React", "Vite", "Tailwind CSS", "Framer Motion"],
       description: "A refined iteration of my digital presence, utilizing Next.js for server-side rendering and optimized performance. Features advanced motion layouts.",
-      github: "https://github.com/yourusername/portfolio-v2"
+      github: "https://github.com/donghaxkim/personalwebsitev2"
+    },
+    {
+      name: "Bayesian Blackwell BlackJack Engine",
+      techStack: ["NumPy", "SciPy", "Typing", "Functools", "Pathlib", "Dataclasses"],
+      description: "A high-performance simulation engine utilizing Bayesian inference and Blackwell games theory to optimize Blackjack strategies. Built with a focus on functional programming patterns and rigorous scientific computing.",
+      github: "https://github.com/donghaxkim/Bayesian-BlackJack-Engine"
     },
     {
       name: "Personal Website v1",
@@ -39,8 +45,8 @@ const Projects = ({ theme }) => {
       style={{ paddingTop: '6rem', paddingBottom: '4rem' }}
     >
       <h1 
-        className="text-6xl md:text-6xl font-semibold tracking-tighter text-left" 
-        style={{ fontFamily: "'Gowun Batang', serif", marginBottom: '0.88rem' }}
+        className="text-6xl md:text-6xl font-semibold tracking-tighter text-left mb-[0.88rem]" 
+        style={{ fontFamily: "'Gowun Batang', serif" }}
       >
         Projects
       </h1>
@@ -50,7 +56,7 @@ const Projects = ({ theme }) => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
         className="space-y-12 md:space-y-16"
-        style={{ fontFamily: "'Karla', sans-serif", marginTop: '0' }} // Reset margin top to ensure precision
+        style={{ fontFamily: "'Karla', sans-serif", marginTop: '0' }}
       >
         {projects.map((project, index) => (
           <motion.div
@@ -91,7 +97,7 @@ const Projects = ({ theme }) => {
               ))}
             </div>
             
-            <p className="text-sm md:text-base font-light leading-tight">
+            <p className="text-sm md:text-base font-light leading-loose">
               {project.description}
             </p>
           </motion.div>
