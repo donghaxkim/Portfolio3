@@ -135,6 +135,12 @@ function App() {
     localStorage.setItem('theme', 'light')
   }, [])
 
+  useEffect(() => {
+    // Apply theme to html element for overscroll areas
+    document.documentElement.style.backgroundColor = theme === 'dark' ? '#1e1e1e' : '#ffffff'
+    document.body.style.backgroundColor = theme === 'dark' ? '#1e1e1e' : '#ffffff'
+  }, [theme])
+
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark'
     setTheme(newTheme)

@@ -56,7 +56,7 @@ const Projects = ({ theme }) => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
         className="space-y-12 md:space-y-16"
-        style={{ fontFamily: "'Karla', sans-serif", marginTop: '0' }}
+        style={{ fontFamily: "'Karla', sans-serif", marginTop: '0.88rem' }}
       >
         {projects.map((project, index) => (
           <motion.div
@@ -97,7 +97,7 @@ const Projects = ({ theme }) => {
               ))}
             </div>
             
-            <p className="text-sm md:text-base font-light leading-loose">
+            <p className="text-sm md:text-base font-light leading-normal">
               {project.description}
             </p>
           </motion.div>
