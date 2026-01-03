@@ -6,11 +6,13 @@ import eaImg from './public/ea.jpeg'
 import starboyImg from './public/starboy.jpg'
 import takecareImg from './public/takecare.jpg'
 import lionelImg from './public/lionel.jpg'
+import dominicFikeImg from './web.ae_.dominicfike.review.courtesy.jpg'
 import overMyDeadBodyAudio from './public/Over My Dead Body.mp3'
 import iFeelItComingAudio from './public/I Feel It Coming.mp3'
 import pastLifeAudio from './public/Tame Impala - Past Life (Audio).mp3'
 import p2Audio from './public/Lil Uzi Vert - P2 [Official Audio].mp3'
 import theOnlyOneAudio from './public/The Only One.mp3'
+import chickenTendersAudio from './public/Dominic Fike - Chicken Tenders Official Video.mp3'
 
 const trackPool = [
   {
@@ -42,6 +44,12 @@ const trackPool = [
     artist: 'Lionel Richie',
     albumArt: lionelImg,
     audioSrc: theOnlyOneAudio,
+  },
+  {
+    title: 'Chicken Tenders',
+    artist: 'Dominic Fike',
+    albumArt: dominicFikeImg,
+    audioSrc: chickenTendersAudio,
   },
 ]
 
