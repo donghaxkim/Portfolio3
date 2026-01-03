@@ -172,3 +172,29 @@ body {
   outline: none;
 }
 
+/* Tooltip box background */
+.tooltip-box {
+  background-color: white;
+}
+
+.dark .tooltip-box {
+  background-color: rgb(30, 30, 30) !important;
+}
+
+/* Tooltip text colors */
+.tooltip-title {
+  color: rgb(17, 24, 39);
+}
+
+.dark .tooltip-title {
+  color: white !important;
+}
+
+.tooltip-description {
+  color: rgb(55, 65, 81);
+}
+
+.dark .tooltip-description {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+

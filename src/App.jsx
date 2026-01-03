@@ -7,6 +7,7 @@ import Navbar from './Navbar'
 import SpotifyPlayer from './SpotifyPlayer'
 import Projects from './Projects'
 import InfiniteGrid from './InfiniteGrid'
+import { Tooltip, TooltipTrigger } from './components/Tooltip'
 
 // Home component
 const Home = ({ theme }) => {
@@ -76,50 +77,66 @@ const Home = ({ theme }) => {
         
         {/* Social Media Icons */}
         <div className="flex gap-4 mt-14 select-none">
-          <a
-            href="mailto:dongha.kim@uwaterloo.ca"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`transition-opacity ${
-              theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
-            }`}
-            draggable={false}
-          >
-            <MdEmail size={20} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/dongha-kimm/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`transition-opacity ${
-              theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
-            }`}
-            draggable={false}
-          >
-            <FaLinkedin size={20} />
-          </a>
-          <a
-            href="https://github.com/donghaxkim"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`transition-opacity ${
-              theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
-            }`}
-            draggable={false}
-          >
-            <FaGithub size={20} />
-          </a>
-          <a
-            href="https://x.com/imdonghakim"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`transition-opacity ${
-              theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
-            }`}
-            draggable={false}
-          >
-            <FaXTwitter size={20} />
-          </a>
+          <Tooltip title="Email" placement="bottom" delay={500}>
+            <TooltipTrigger>
+              <a
+                href="mailto:dongha.kim@uwaterloo.ca"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`transition-opacity ${
+                  theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                }`}
+                draggable={false}
+              >
+                <MdEmail size={20} />
+              </a>
+            </TooltipTrigger>
+          </Tooltip>
+          <Tooltip title="LinkedIn" placement="bottom" delay={500}>
+            <TooltipTrigger>
+              <a
+                href="https://www.linkedin.com/in/dongha-kimm/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`transition-opacity ${
+                  theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                }`}
+                draggable={false}
+              >
+                <FaLinkedin size={20} />
+              </a>
+            </TooltipTrigger>
+          </Tooltip>
+          <Tooltip title="GitHub" placement="bottom" delay={500}>
+            <TooltipTrigger>
+              <a
+                href="https://github.com/donghaxkim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`transition-opacity ${
+                  theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                }`}
+                draggable={false}
+              >
+                <FaGithub size={20} />
+              </a>
+            </TooltipTrigger>
+          </Tooltip>
+          <Tooltip title="X" placement="bottom" delay={500}>
+            <TooltipTrigger>
+              <a
+                href="https://x.com/imdonghakim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`transition-opacity ${
+                  theme === 'dark' ? 'text-white/60 hover:text-white/90' : 'text-black/60 hover:text-black/90'
+                }`}
+                draggable={false}
+              >
+                <FaXTwitter size={20} />
+              </a>
+            </TooltipTrigger>
+          </Tooltip>
         </div>
       </motion.div>
     </motion.div>
@@ -139,6 +156,12 @@ function App() {
     // Apply theme to html element for overscroll areas
     document.documentElement.style.backgroundColor = theme === 'dark' ? '#1e1e1e' : '#ffffff'
     document.body.style.backgroundColor = theme === 'dark' ? '#1e1e1e' : '#ffffff'
+    // Apply dark class for Tailwind dark mode
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
   }, [theme])
 
   const toggleTheme = () => {
