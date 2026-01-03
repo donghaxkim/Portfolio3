@@ -8,6 +8,7 @@ import SpotifyPlayer from './SpotifyPlayer'
 import Projects from './Projects'
 import InfiniteGrid from './InfiniteGrid'
 import { Tooltip, TooltipTrigger } from './components/Tooltip'
+import VisitorCounter from './components/VisitorCounter'
 
 // Home component
 const Home = ({ theme }) => {
@@ -197,6 +198,9 @@ function App() {
         <div className="fixed bottom-4 right-4 z-50 max-w-[320px]">
           <SpotifyPlayer theme={theme} />
         </div>
+
+        {/* Visitor Counter - Only visible when ?admin=true in URL */}
+        <VisitorCounter theme={theme} />
       </main>
     </motion.div>
   )
