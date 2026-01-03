@@ -17,7 +17,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
       >
         <div className={`h-[72px] rounded-full w-[520px] px-8 flex items-center justify-between text-2xl ${glassClass} ${iconColor} backdrop-blur-3xl select-none`}>
-            <Tooltip title="home" placement="bottom" delay={500} arrow>
+            <Tooltip title="home" placement="bottom" delay={500}>
               <TooltipTrigger>
                 <RouterLink
                   to="/"
@@ -29,7 +29,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               </TooltipTrigger>
             </Tooltip>
 
-            <Tooltip title="projects" placement="bottom" delay={500} arrow>
+            <Tooltip title="projects" placement="bottom" delay={500}>
               <TooltipTrigger>
                 <RouterLink
                   to="/projects"
@@ -41,7 +41,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               </TooltipTrigger>
             </Tooltip>
 
-            <Tooltip title="gallery" placement="bottom" delay={500} arrow>
+            <Tooltip title="gallery" placement="bottom" delay={500}>
               <TooltipTrigger>
                 <RouterLink
                   to="/grid"
@@ -53,7 +53,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               </TooltipTrigger>
             </Tooltip>
 
-            <Tooltip title={theme === 'dark' ? 'light mode' : 'dark mode'} placement="bottom" delay={500} arrow>
+            <Tooltip title={theme === 'dark' ? 'light mode' : 'dark mode'} placement="bottom" delay={500}>
               <TooltipTrigger>
                 <div
                   className={`cursor-pointer w-[56px] h-[56px] flex items-center justify-center ${iconHover} transition-all duration-200`}

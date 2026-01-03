@@ -35,16 +35,17 @@ export const Tooltip = ({
                 {({ isEntering, isExiting }) => (
                     <div
                         className={cx(
-                            "z-50 flex max-w-xs origin-(--trigger-anchor-point) flex-col items-start gap-1 rounded-2xl bg-primary-solid px-5 shadow-xl will-change-transform",
-                            description ? "py-4" : "py-3",
+                            "z-50 flex max-w-xs origin-(--trigger-anchor-point) flex-col items-center gap-1 rounded bg-primary-solid shadow-xl will-change-transform",
+                            description ? "px-4 py-4" : "px-3 py-3",
                             isEntering &&
                                 "ease-out animate-in fade-in zoom-in-95 in-placement-left:slide-in-from-right-0.5 in-placement-right:slide-in-from-left-0.5 in-placement-top:slide-in-from-bottom-0.5 in-placement-bottom:slide-in-from-top-0.5",
                             isExiting &&
                                 "ease-in animate-out fade-out zoom-out-95 in-placement-left:slide-out-to-right-0.5 in-placement-right:slide-out-to-left-0.5 in-placement-top:slide-out-to-bottom-0.5 in-placement-bottom:slide-out-to-top-0.5",
                         )}
+                        style={{ fontFamily: "'Karla', sans-serif" }}
                     >
-                        <span className="text-sm font-semibold text-white">{title}</span>
-                        {description && <span className="text-sm font-medium text-tooltip-supporting-text">{description}</span>}
+                        <span className="text-xs font-bold text-white whitespace-nowrap">{title}</span>
+                        {description && <span className="text-xs font-semibold text-tooltip-supporting-text">{description}</span>}
                         {arrow && (
                             <AriaOverlayArrow>
                                 <svg
